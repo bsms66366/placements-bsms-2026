@@ -1,0 +1,33 @@
+0 info it worked if it ends with ok
+1 verbose cli [ '/usr/bin/node', '/usr/bin/npm', 'run', 'dev' ]
+2 info using npm@6.14.11
+3 info using node@v10.24.0
+4 verbose run-script [ 'predev', 'dev', 'postdev' ]
+5 info lifecycle @~predev: @
+6 info lifecycle @~dev: @
+7 verbose lifecycle @~dev: unsafe-perm in lifecycle true
+8 verbose lifecycle @~dev: PATH: /usr/lib/node_modules/npm/node_modules/npm-lifecycle/node-gyp-bin:/var/www/placements.bsms.ac.uk/node_modules/.bin:/home/bsms6636/.local/bin:/home/bsms6636/bin:/usr/local/bin:/usr/bin:/usr/local/sbin:/usr/sbin
+9 verbose lifecycle @~dev: CWD: /var/www/placements.bsms.ac.uk
+10 silly lifecycle @~dev: Args: [ '-c', 'vite' ]
+11 info lifecycle @~dev: Failed to exec dev script
+12 verbose stack Error: @ dev: `vite`
+12 verbose stack spawn ENOENT
+12 verbose stack     at ChildProcess.<anonymous> (/usr/lib/node_modules/npm/node_modules/npm-lifecycle/lib/spawn.js:48:18)
+12 verbose stack     at ChildProcess.emit (events.js:198:13)
+12 verbose stack     at maybeClose (internal/child_process.js:982:16)
+12 verbose stack     at Process.ChildProcess._handle.onexit (internal/child_process.js:259:5)
+13 verbose pkgid @
+14 verbose cwd /var/www/placements.bsms.ac.uk
+15 verbose Linux 4.18.0-348.12.2.el8_5.x86_64
+16 verbose argv "/usr/bin/node" "/usr/bin/npm" "run" "dev"
+17 verbose node v10.24.0
+18 verbose npm  v6.14.11
+19 error code ELIFECYCLE
+20 error syscall spawn
+21 error file sh
+22 error errno ENOENT
+23 error @ dev: `vite`
+23 error spawn ENOENT
+24 error Failed at the @ dev script.
+24 error This is probably not a problem with npm. There is likely additional logging output above.
+25 verbose exit [ 1, true ]

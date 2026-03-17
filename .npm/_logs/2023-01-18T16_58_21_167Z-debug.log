@@ -1,0 +1,22 @@
+0 info it worked if it ends with ok
+1 verbose cli [ '/usr/bin/node', '/usr/bin/npm', 'run', 'watch' ]
+2 info using npm@6.14.11
+3 info using node@v10.24.0
+4 verbose stack Error: missing script: watch
+4 verbose stack     at run (/usr/lib/node_modules/npm/lib/run-script.js:155:19)
+4 verbose stack     at /usr/lib/node_modules/npm/lib/run-script.js:63:5
+4 verbose stack     at /usr/lib/node_modules/npm/node_modules/read-package-json/read-json.js:116:5
+4 verbose stack     at /usr/lib/node_modules/npm/node_modules/read-package-json/read-json.js:436:5
+4 verbose stack     at checkBinReferences_ (/usr/lib/node_modules/npm/node_modules/read-package-json/read-json.js:391:45)
+4 verbose stack     at final (/usr/lib/node_modules/npm/node_modules/read-package-json/read-json.js:434:3)
+4 verbose stack     at then (/usr/lib/node_modules/npm/node_modules/read-package-json/read-json.js:161:5)
+4 verbose stack     at /usr/lib/node_modules/npm/node_modules/read-package-json/read-json.js:281:12
+4 verbose stack     at /usr/lib/node_modules/npm/node_modules/graceful-fs/graceful-fs.js:123:16
+4 verbose stack     at FSReqWrap.readFileAfterClose [as oncomplete] (internal/fs/read_file_context.js:53:3)
+5 verbose cwd /var/www/placements.bsms.ac.uk
+6 verbose Linux 4.18.0-348.12.2.el8_5.x86_64
+7 verbose argv "/usr/bin/node" "/usr/bin/npm" "run" "watch"
+8 verbose node v10.24.0
+9 verbose npm  v6.14.11
+10 error missing script: watch
+11 verbose exit [ 1, true ]

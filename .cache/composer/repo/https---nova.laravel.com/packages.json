@@ -1,0 +1,12 @@
+{
+    "packages": [],
+    "includes": {
+        "include/all$12cec5b858ac69d1257d584d7c1f3ff024577d5c.json": {
+            "sha1": "12cec5b858ac69d1257d584d7c1f3ff024577d5c"
+        }
+    },
+    "metadata-url": "/p2/%package%.json",
+    "available-packages": [
+        "laravel/nova"
+    ]
+}
