@@ -75,15 +75,14 @@ use App\Models\AppFeedback;
 // Student login using bsms_id as password
 Route::post('/login', function (Request $request) {
     $request->validate([
-        'email' => 'required|string',
+        'email' => 'required|email',
         'password' => 'required|string',
         'device_name' => 'required|string',
     ]);
  
-    // Try to find student by email or bsms_id with relationships
+    // Try to find student by email with relationships
     $student = Student::with(['gp_teacher', 'facilitator', 'group', 'location2025', 'locations'])
         ->where('email', $request->email)
-        ->orWhere('bsms_id', $request->email)
         ->first();
  
     // Check if student exists and password matches bsms_id
@@ -449,4 +448,15 @@ Route::get('app-feedback', function() {
     return AppFeedback::orderBy('created_at', 'desc')->get();
 });
 
+// Attendance Report Routes
+Route::prefix('attendance')->group(function () {
+    Route::get('all-students', [App\Http\Controllers\AttendanceReportController::class, 'getAllStudents']);
+    Route::post('filter', [App\Http\Controllers\AttendanceReportController::class, 'filterStudents']);
+    Route::get('statistics', [App\Http\Controllers\AttendanceReportController::class, 'getStatistics']);
+    Route::get('filter-options', [App\Http\Controllers\AttendanceReportController::class, 'getFilterOptions']);
+    Route::get('student/{id}', [App\Http\Controllers\AttendanceReportController::class, 'getStudent']);
+    Route::post('export-cohort-pdf', [App\Http\Controllers\AttendanceReportController::class, 'exportCohortPDF']);
+    Route::get('export-cohort-pdf', [App\Http\Controllers\AttendanceReportController::class, 'exportCohortPDF']);
+    Route::get('export-csv', [App\Http\Controllers\AttendanceReportController::class, 'exportCSV']);
+});
 
