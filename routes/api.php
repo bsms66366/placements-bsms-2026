@@ -386,10 +386,16 @@ Route::middleware('auth:sanctum')->post('location-signoffs', function(Request $r
         'bsms_id' => 'required|string|max:255',
         'reg_number_of_approver' => 'nullable|string|max:255',
         'signoff_name' => 'nullable|string|max:255',
-        'signature_svg' => 'nullable|string',
+        'signature_svg_base64' => 'nullable|string',
         'location_id' => 'required|exists:locations2025,id',
         'location_postcode' => 'nullable|string|max:255',
     ]);
+    
+    // Decode base64 signature back to SVG
+    if (isset($validated['signature_svg_base64'])) {
+        $validated['signature_svg'] = base64_decode($validated['signature_svg_base64']);
+        unset($validated['signature_svg_base64']);
+    }
     
     return LocationSignoff::create($validated);
 });
