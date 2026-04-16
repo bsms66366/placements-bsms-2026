@@ -112,15 +112,7 @@ class GPTeacher extends Resource
             //->pickerDefaultHour(23)  //Add default hour
             //->pickerDefaultMinute(59)//Add default minute
             //->pickerDefaultSeconds(59) //Add default seconds
-        ];     
-             return[
-        new Panel('GP Surgery Information', $this->GPFields())
-
-    ];
-    return[
-        BelongsTo::make('Location'),
-
-    ];
+        ];
 }
     
     /**

@@ -11,8 +11,7 @@ use App\Nova\Metrics\NewUsers;
 //use App\Nova\Metrics\StudentCount;
 
 use App\Nova\Metrics\SessionNotes;
-//use App\Nova\Metrics\DissectionVideos;
-use App\Nova\Metrics\Dissectionvideos;
+use App\Nova\Metrics\DissectionVideos;
 use App\Nova\Metrics\PathPotsCount;
 
 
@@ -28,7 +27,7 @@ class AnatomyInterface extends Dashboard
         return [
         new NewUsers(),
         new SessionNotes(),
-        new Dissectionvideos(),
+        new DissectionVideos(),
         new PathPotsCount(),
         ];
     }

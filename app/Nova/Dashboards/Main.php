@@ -19,7 +19,7 @@ use App\Nova\Metrics\SessionNotes;
 use App\Nova\Metrics\NotesCount;
 use App\Nova\Metrics\PhysQuizzesCount;
 //use App\Nova\Metrics\VideoCount;
-use App\Nova\Metrics\DissectionVideos;
+use App\Nova\Metrics\Dissections;
 //use App\Nova\Metrics\Dissection;
 use App\Nova\Metrics\PathPotsCount;
 use App\Nova\Metrics\AdminAccessGuide;
@@ -46,7 +46,7 @@ public static $displayInNavigation = false;
         //new Mostviewednotes(),
         //new SessionNotes(),
         //new Dissection(),
-        new DissectionVideos(),
+        new Dissections(),
         new PathPotsCount(),
         new DicomStudies(),
         //new VideoCount(),

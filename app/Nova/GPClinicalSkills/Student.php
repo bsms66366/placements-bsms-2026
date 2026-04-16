@@ -3,254 +3,159 @@
 namespace App\Nova\GPClinicalSkills;
 
 use App\Nova\Resource;
-use Whitecube\NovaFlexibleContent\Flexible;
-use App\Models\Location2025;
-use App\Nova\Actions\ActiveUser;
-use App\Models\GPTeacher;
-use App\Nova\Metrics\FacilitatorCount;
-use Illuminate\Database\Eloquent\Factories\BelongsToManyRelationship;
-use Illuminate\Database\Eloquent\Relations\HasOneOrMany;
-
-
-use App\Nova\Actions\Enrolled;
-use Illuminate\Http\Request;
-
-use Laravel\Nova\Fields\DateTime;
-use Laravel\Nova\Fields\Date;
-use Laravel\Nova\Fields\Time;
 use Laravel\Nova\Fields\ID;
-use Laravel\Nova\Fields\Number;
 use Laravel\Nova\Fields\Text;
-use Laravel\Nova\Fields\Gravatar;
-use Laravel\Nova\Fields\Image;
-use Laravel\Nova\Http\Requests\NovaRequest;
-use Laravel\Nova\Fields\BelongsTo;
-use Laravel\Nova\Fields\BelongsToMany;
-use Laravel\Nova\Fields\HasMany;
-use Laravel\Nova\Panel;
-use Laravel\Nova\Fields\Trix;
+use Laravel\Nova\Fields\Date;
 use Laravel\Nova\Fields\Boolean;
-use Laravel\Nova\Fields\Markdown;
-use Carbon\Carbon;
-
-
+use Laravel\Nova\Fields\BelongsTo;
+use Laravel\Nova\Fields\HasMany;
+use Laravel\Nova\Fields\Select;
+use Laravel\Nova\Http\Requests\NovaRequest;
+use App\Nova\Actions\ExportAttendancePDF;
+use App\Nova\Actions\ExportCohortAttendancePDF;
+use App\Nova\Actions\ExportAttendanceCSV;
 
 class Student extends Resource
 {
-    /**
-     * The logical group associated with the resource.
-     *
-     * @var string
-     */
     public static $group = 'GP/Clinical Skills';
-
-    public static $displayInNavigation = true;
-    /**
-     * The model the resource corresponds to.
-     *
-     * @var string
-     */
+    
     public static $model = \App\Models\Student::class;
-  
 
-    /**
-     * The single value that should be used to represent the resource when being displayed.
-     *
-     * @var string
-     */
     public static $title = 'name';
 
-    /**
-     * The columns that should be searched.
-     *
-     * @var array
-     */
     public static $search = [
-        'id','name','user_id','location','student','dob',
+        'id',
+        'name',
+        'bsms_id',
+        'student_number',
+        'email',
     ];
 
-    /**
-     * Get the fields displayed by the resource.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return array
-     */
     public function fields(NovaRequest $request)
     {
-
-        return[
-            new Panel('Student Information', $this->studentInformation()),
-            new Panel('GP Teacher', $this->GPFields()),
-            new Panel('GP Practice', $this->addressFields()),
-            new Panel('Facilitators', $this->facilitatorFields()),
-            new Panel('Notes', $this->notesFields()),
-            new Panel('Session Attendance', $this->sessionAttendanceFields()),
-            new Panel('Placement Location Signoffs', $this->locationSignoffFields()),
-            new Panel('Examination Results', $this->examinationResultsFields()),
-        ];
-    }
-/**
- * Get the address fields for the resource.
- *
- * @return array
- */
-
-            protected function studentInformation()
-        {
-            //Age = Carbon::createFromDate(2016)->addYears(4); 
         return [
-            ID::make(__('ID'), 'id')->sortable(),
-            //Image::make('Photo')->disableDownload(),
-            //Gravatar::make('Avatar', 'EmailAddress')->maxWidth(50),
-            //Gravatar::make()->maxWidth(50),
-             // Removed temporarily as there is no corresponding
-            // database column in gp_teachers table. This prevents
-            // us saving teachers using the Nova UI.
-           Boolean::make('active')
-            ->trueValue('Yes')
-            ->falseValue('No'),
-            // END
-            Text::make('Name', 'name')->required(),
-            Text::make('BSMSID','bsms_id')->required(),
-            Number::make('Student Number','student_number')->required(),
-            Text::make('First name','first_name')->required(),
-            Text::make('Known As','known_as' ),
-            Text::make('Year','year')->required(),
-            Text::make('Email','email')->required(),
-            Text::make('Rotation Group','rotation_group')->required(),
-            Text::make('Seminar Group','seminar_group')->nullable(),
-            Text::make('CPW','cpw')->nullable(),
-            Text::make('CPS','cps')->nullable(),
-            Text::make('CPW/CPS','cpw_cps')->nullable(),
-            Text::make('Simulated Home Visit Group','simulated_home_visit_group')->nullable(),
-           //Text::make('GPTeacher','GPTeacher'),
-            //BelongsTo::make('GPTeacher'),
-            //DateTime::make('age','dob')->age(),
-            //Carbon::createFromDate('Age','DOB'),
-            //Text::make('Age', function () { return $this->getAge(); }),
-            //BelongsTo::make('Placement'),
-            Text::make('Gender'),
-            //Date::make('Age')->required(),
-            Text::make('Age')->required(),
-            Boolean::make('Car Owner','car_owner')
-             ->trueValue('Yes')
-             ->falseValue('No'),
-             Date::make('DOB','dob')->filterable(),
-             
-            //DateTime::make('age', function () { return $this->getAttributeAge(); }),
-           
-            //->pickerDefaultHour(23)//Add default hour
-            //->pickerDefaultMinute(59)//Add default minute
-            //->pickerDefaultSeconds(59) //Add default seconds
-            //->format('DD MMM YYYY'), 
-        ];
-        
-        }
-        
-        public function GPFields()
-        {
-             return[
-                BelongsTo::make('GP Teacher', 'gp_teacher', 'App\Nova\GPClinicalSkills\GPTeacher'),
-            ];
-        }
-        public function addressFields()
-        {
-            return[
-            BelongsTo::make('Location2025','location2025'),
-    ];
+            ID::make()->sortable(),
 
-        }
+            Boolean::make('Active', 'active')
+                ->trueValue('1')
+                ->falseValue('0'),
 
+            Text::make('Name')
+                ->sortable()
+                ->rules('required', 'max:255'),
 
-         public function facilitatorFields()
-        {
-             return[
-                BelongsTo::make('Facilitator', 'facilitator'),
-            ];
-        }
-        public function notesFields()
-        {
-            return[
-                Trix::make('Notes','notes'),
-            ]; 
-        }
+            Text::make('BSMS ID', 'bsms_id')
+                ->sortable()
+                ->rules('required', 'max:255'),
 
-        public function sessionAttendanceFields()
-        {
-            return[
-                \App\Nova\Fields\AttendanceDisplay::make('Session Attendance Records', 'sessions')
-                    ->onlyOnDetail(),
-            ]; 
-        }
+            Text::make('Student Number', 'student_number')
+                ->sortable()
+                ->rules('required', 'max:255'),
 
-        public function locationSignoffFields()
-        {
-            return[
-                \App\Nova\Fields\AttendanceDisplay::make('Location Signoff Records', 'locations')
-                    ->onlyOnDetail(),
-            ]; 
-        }
+            Text::make('First name', 'first_name')
+                ->sortable()
+                ->rules('required', 'max:255'),
 
-        public function examinationResultsFields()
-        {
-            return[
-                \App\Nova\Fields\AttendanceDisplay::make('Examination Results Records', 'examinations')
-                    ->onlyOnDetail(),
-            ]; 
-        }
+            Text::make('Known As', 'known_as')
+                ->sortable()
+                ->rules('max:255'),
 
-    /**
-     * Get the cards available for the request.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return array
-     */
-    public function cards(Request $request)
-    {
-        return [
-            (new \App\Nova\Metrics\AttendanceStatistics())->width('1/4'),
-            (new \App\Nova\Metrics\SessionAttendanceCount())->width('1/4'),
-            (new \App\Nova\Metrics\LocationSignoffCount())->width('1/4'),
-            (new \App\Nova\Metrics\ExaminationCompetency())->width('1/4'),
+            Text::make('Email')
+                ->sortable()
+                ->rules('required', 'email', 'max:255'),
+
+            Text::make('Year')
+                ->sortable()
+                ->rules('required'),
+
+            Text::make('Rotation Group', 'rotation_group')
+                ->sortable()
+                ->rules('required', 'max:255'),
+
+            Text::make('Seminar Group', 'seminar_group')
+                ->sortable()
+                ->rules('max:255'),
+
+            Text::make('CPW', 'cpw')
+                ->sortable()
+                ->rules('max:255'),
+
+            Text::make('CPS', 'cps')
+                ->sortable()
+                ->rules('max:255'),
+
+            Text::make('CPW/CPS', 'cpw_cps')
+                ->sortable()
+                ->rules('max:255'),
+
+            Text::make('Simulated Home Visit Group', 'simulated_home_visit_group')
+                ->sortable()
+                ->rules('max:255'),
+
+            Date::make('Date of Birth', 'dob')
+                ->sortable(),
+
+            Select::make('Gender', 'gender')
+                ->options([
+                    'male' => 'Male',
+                    'female' => 'Female',
+                ])
+                ->displayUsingLabels()
+                ->rules('required'),
+
+            Text::make('Age', 'age')
+                ->sortable()
+                ->rules('required', 'max:255'),
+
+            Select::make('Car Owner', 'car_owner')
+                ->options([
+                    'Yes' => 'Yes',
+                    'No' => 'No',
+                ])
+                ->displayUsingLabels()
+                ->rules('required'),
+
+            BelongsTo::make('GP Practice', 'location2025', Location2025::class)
+                ->rules('required'),
+
+            BelongsTo::make('GP Teacher', 'gp_teacher', GPTeacher::class)
+                ->rules('required'),
+
+            BelongsTo::make('Facilitator', 'facilitator', Facilitator::class)
+                ->nullable(),
+
+            BelongsTo::make('Group', 'group', Group::class)
+                ->nullable(),
+
+            HasMany::make('Session Attendance', 'sessionAttendance', SessionAttendance2026::class),
+
+            HasMany::make('Location Signoffs', 'locationSignoffs', LocationSignoff::class),
+
+            HasMany::make('Examination Results', 'examinationResults', ExaminationResult::class),
         ];
     }
 
-    /**
-     * Get the filters available for the resource.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return array
-     */
-    public function filters(Request $request)
+    public function cards(NovaRequest $request)
     {
         return [];
     }
 
-    /**
-     * Get the lenses available for the resource.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return array
-     */
-    public function lenses(Request $request)
+    public function filters(NovaRequest $request)
     {
         return [];
     }
 
-    /**
-     * Get the actions available for the resource.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return array
-     */
-    public function actions(Request $request)
+    public function lenses(NovaRequest $request)
+    {
+        return [];
+    }
+
+    public function actions(NovaRequest $request)
     {
         return [
-            //new \App\Nova\Actions\ImportUsers,
-            //new \App\Nova\Actions\ImportStudents,
-           // new \App\Nova\Actions\Enrolled,
-           new \App\Nova\Actions\ActivateUser,
-           new \App\Nova\Actions\ExportAttendancePDF,
+            new ExportAttendancePDF,
+            new ExportCohortAttendancePDF,
+            new ExportAttendanceCSV,
         ];
     }
 }

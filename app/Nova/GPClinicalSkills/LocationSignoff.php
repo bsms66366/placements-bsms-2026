@@ -58,11 +58,34 @@ class LocationSignoff extends Resource
                 ->rules('nullable', 'max:255')
                 ->help('Name of the person signing off'),
 
+            Text::make('Signature Preview', function () {
+                if (empty($this->signature_svg)) {
+                    return '<div style="padding: 10px; color: #999; font-style: italic;">No signature available</div>';
+                }
+                
+                $pathData = $this->signature_svg;
+                
+                // Check if it's already a complete SVG
+                if (strpos(trim($pathData), '<svg') === 0) {
+                    return $pathData;
+                }
+                
+                // Wrap path data in SVG element
+                return '<div style="padding: 10px; background: #f9f9f9; border: 1px solid #ddd; border-radius: 4px;">
+                    <svg width="300" height="150" viewBox="0 0 300 150" xmlns="http://www.w3.org/2000/svg" style="display: block; max-width: 100%;">
+                        <path d="' . htmlspecialchars($pathData) . '" stroke="black" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                </div>';
+            })
+            ->asHtml()
+            ->exceptOnForms(),
+
             Textarea::make('Signature SVG', 'signature_svg')
                 ->nullable()
                 ->rules('nullable')
-                ->help('SVG path data for the signature')
-                ->hideFromIndex(),
+                ->help('SVG path data for the signature - this will be rendered as a visual signature')
+                ->hideFromIndex()
+                ->rows(3),
 
             DateTime::make('Created At', 'created_at')
                 ->sortable()

@@ -144,13 +144,6 @@ class Dissection extends Resource
             DateTime::make('created','created_at'),
 
         ];
-        
-        // Modify the query to use the default sort column and direction
-                return $query->orderBy($defaultSortColumn, $defaultSortDirection);
-        
-     
-
-        
 }
     
                     //BelongsTo::make('GPTeacher', 'gp_teacher'),

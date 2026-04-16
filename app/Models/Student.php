@@ -20,7 +20,7 @@ class Student extends Model
     //use HasFactory;
     use HasApiTokens, HasFactory, Notifiable, AuthenticatesWithLdap;
 
-    protected $fillable = ['id','name','bsms_id','student_number','firstname','known_as','dob','age','email','rotation_group','seminar_group','cpw','cps','cpw_cps','simulated_home_visit_group','year','gender','car_owner','gp_teacher','gp_teacher_id','facilitator_id','group_id','locations_id','location2025_id','notes','guid','domain'];
+    protected $fillable = ['id','name','bsms_id','student_number','first_name','known_as','dob','age','email','rotation_group','seminar_group','cpw','cps','cpw_cps','simulated_home_visit_group','year','gender','car_owner','gp_teacher','gp_teacher_id','facilitator_id','group_id','locations_id','location2025_id','notes','guid','domain'];
 
 
     protected $hidden = [

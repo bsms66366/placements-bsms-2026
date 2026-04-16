@@ -12,6 +12,7 @@ class VerifyCsrfToken extends Middleware
      * @var array<int, string>
      */
     protected $except = [
-'https://placements.bsms.ac.uk/nova-api/invitations?editing=true&editMode=create'
+        'https://placements.bsms.ac.uk/nova-api/invitations?editing=true&editMode=create',
+        'api/*',
     ];
 }

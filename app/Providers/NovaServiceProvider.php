@@ -82,6 +82,7 @@ class NovaServiceProvider extends NovaApplicationServiceProvider
                          'O.Steele@bsms.ac.uk',
                          'W.Rivers@bsms.ac.uk',
                          'M.Adrain@bsms.ac.uk',
+                         'E.Mclean-Inglis@bsms.ac.uk'
                      ]);
                     
  */
@@ -166,7 +167,7 @@ class NovaServiceProvider extends NovaApplicationServiceProvider
     public function tools()
     {
         return [
-        
+            new \Bsms\AllStudentsAttendance\AllStudentsAttendance,
         //new DicomViewer,
                 //new \Mastani\NovaPasswordReset\NovaPasswordReset,
             //new \Pktharindu\NovaPermissions\NovaPermissions(),

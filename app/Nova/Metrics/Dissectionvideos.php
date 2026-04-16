@@ -17,7 +17,7 @@ class DissectionVideos extends Value
      */
     public function calculate(NovaRequest $request)
     {
-        return $this->max($request, Dissection::class, 'id');
+        return $this->count($request, Dissection::class);
     }
 
     /**
@@ -28,15 +28,9 @@ class DissectionVideos extends Value
     public function ranges()
     {
         return [
-//            30 => Nova::__('30 Days'),
-//            60 => Nova::__('60 Days'),
-//            365 => Nova::__('365 Days'),
-//            'TODAY' => Nova::__('Today'),
-//            'YESTERDAY' => Nova::__('Yesterday'),
-//           
-//            'MTD' => Nova::__('Month To Date'),
-//            'QTD' => Nova::__('Quarter To Date'),
-//            'YTD' => Nova::__('Year To Date'),
+            30 => Nova::__('30 Days'),
+            60 => Nova::__('60 Days'),
+            365 => Nova::__('365 Days'),
             'ALL' => Nova::__('All Time'),
         ];
     }
@@ -49,25 +43,5 @@ class DissectionVideos extends Value
     public function cacheFor()
     {
         // return now()->addMinutes(5);
-    }
-
-    /**
-     * Get the displayable name of the metric.
-     *
-     * @return string
-     */
-    public function name()
-    {
-        return 'Dissection Videos';
-    }
-
-    /**
-     * Get the URI key for the metric.
-     *
-     * @return string
-     */
-    public function uriKey()
-    {
-        return 'dissection-videos';
     }
 }

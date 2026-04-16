@@ -69,16 +69,16 @@ class User extends Authenticatable
         'dob' => 'date',
         //'level' => UserLevel::class,
     ];
-// app/Models/User.php
-public function hasRole($roleName)
-{
-    return optional($this->role)->name === $roleName;
-}
 
-public function hasAnyRole(array $roles)
-{
-    return in_array(optional($this->role)->name, $roles);
-}
+    public function hasRole($roleName)
+    {
+        return optional($this->role)->name === $roleName;
+    }
+
+    public function hasAnyRole(array $roles)
+    {
+        return in_array(optional($this->role)->name, $roles);
+    }
 
     //public static $snakeAttributes = true;
 
