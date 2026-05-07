@@ -19,6 +19,8 @@ use App\Http\Controllers\UserController;
 use App\Http\Controllers\PathPotController;
 use App\Http\Controllers\SpottersController;
 use App\Http\Controllers\DicomController;
+use App\Http\Controllers\SessionAttendanceController;
+use App\Http\Controllers\LocationSignoffController;
 
 use App\Http\Controllers\PhysquizController;
 
@@ -45,10 +47,8 @@ use App\Models\Category;
 use App\Models\NiftiViewer;
 use App\Models\Physquiz;
 use App\Models\Biomedeng;
-use App\Models\SessionAttendance2026;
 use App\Models\MonitoredSessions2026;
 use App\Models\Location2025;
-use App\Models\LocationSignoff;
 use App\Models\Examination;
 use App\Models\ExaminationResult;
 use App\Models\PhaseOneStaff;
@@ -357,90 +357,23 @@ Route::get('monitored-sessions', function() {
     return response()->json($grouped);
 });
 
-Route::get('session-attendance', function() {
-    return SessionAttendance2026::all();
-});
-
-Route::middleware('auth:sanctum')->post('session-attendance', function(Request $request) {
-    $validated = $request->validate([
-        'bsms_id' => 'required|string|max:255',
-        'session_date' => 'required|date',
-        'session_id' => 'required|exists:MonitoredSessions2026,ID',
-    ]);
-    
-    return SessionAttendance2026::create($validated);
-});
+Route::get('session-attendance', [SessionAttendanceController::class, 'index']);
+Route::middleware('auth:sanctum')->post('session-attendance', [SessionAttendanceController::class, 'store']);
+Route::middleware('auth:sanctum')->post('save-session', [SessionAttendanceController::class, 'saveSession']);
 
 // Location and Signoff Routes
 Route::get('locations2025', function() {
     return Location2025::all();
 });
 
-Route::get('location-signoffs', function() {
-    return LocationSignoff::all();
-});
-
-Route::middleware('auth:sanctum')->post('location-signoffs', function(Request $request) {
-    $validated = $request->validate([
-        'location_barcode' => 'required|string|max:255',
-        'bsms_id' => 'required|string|max:255',
-        'reg_number_of_approver' => 'nullable|string|max:255',
-        'signoff_name' => 'nullable|string|max:255',
-        'signature_svg_base64' => 'nullable|string',
-        'location_id' => 'required|exists:locations2025,id',
-        'location_postcode' => 'nullable|string|max:255',
-    ]);
-    
-    // Decode base64 signature back to SVG
-    if (isset($validated['signature_svg_base64'])) {
-        $validated['signature_svg'] = base64_decode($validated['signature_svg_base64']);
-        unset($validated['signature_svg_base64']);
-    }
-    
-    return LocationSignoff::create($validated);
-});
+Route::get('location-signoffs', [LocationSignoffController::class, 'index']);
+Route::middleware('auth:sanctum')->post('location-signoffs', [LocationSignoffController::class, 'store']);
 
 // Generic endpoint name to bypass ModSecurity URL pattern matching
-Route::middleware('auth:sanctum')->post('submit-data', function(Request $request) {
-    $validated = $request->validate([
-        'location_barcode' => 'required|string|max:255',
-        'bsms_id' => 'required|string|max:255',
-        'reg_number_of_approver' => 'nullable|string|max:255',
-        'signoff_name' => 'nullable|string|max:255',
-        'data' => 'nullable|string',
-        'location_id' => 'required|exists:locations2025,id',
-        'location_postcode' => 'nullable|string|max:255',
-    ]);
-    
-    // Decode base64 data back to SVG signature
-    if (isset($validated['data'])) {
-        $validated['signature_svg'] = base64_decode($validated['data']);
-        unset($validated['data']);
-    }
-    
-    return LocationSignoff::create($validated);
-});
+Route::middleware('auth:sanctum')->post('submit-data', [LocationSignoffController::class, 'submitData']);
 
 // Last resort: GET request (ModSecurity usually only blocks POST)
-Route::middleware('auth:sanctum')->post('save-record', function(Request $request) {
-    $validated = $request->validate([
-        'location_barcode' => 'required|string|max:255',
-        'bsms_id' => 'required|string|max:255',
-        'reg_number_of_approver' => 'nullable|string|max:255',
-        'signoff_name' => 'nullable|string|max:255',
-        'data' => 'nullable|string',
-        'location_id' => 'required|exists:locations2025,id',
-        'location_postcode' => 'nullable|string|max:255',
-    ]);
-    
-    // Decode base64 PNG image data (or SVG path data)
-    if (isset($validated['data'])) {
-        $validated['signature_svg'] = base64_decode($validated['data']);
-        unset($validated['data']);
-    }
-    
-    return LocationSignoff::create($validated);
-});
+Route::middleware('auth:sanctum')->post('save-record', [LocationSignoffController::class, 'saveRecord']);
 
 // Examination Routes
 Route::get('examinations', function() {
