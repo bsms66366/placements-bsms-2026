@@ -28,6 +28,7 @@ use App\Http\Controllers\Auth\NovaResetPasswordController;
 //use App\Http\Controllers\Auth\CodeCheckController;
 use App\Http\Controllers\Auth\ResetPasswordController;
 use App\Http\Controllers\Auth\ForgotPasswordController;
+use App\Http\Controllers\StuTalkController;
 
 use App\Enums\StatusEnums;
 use App\Models\GPTeacher;
@@ -335,6 +336,14 @@ Route::get('3d-models', function() {
 
  
 });*/
+
+//SITS API Routes
+Route::middleware('auth:sanctum')->post('/stu-talk/student-profile', [StuTalkController::class, 'getStudentProfile']);
+
+
+
+
+
 
 // 2026 Attendance System API Routes
 Route::get('monitored-sessions', function() {
