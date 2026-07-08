@@ -4,7 +4,6 @@ namespace App\Nova\Admin;
 
 use App\Nova\Resource;
 
-use Illuminate\Http\Request;
 use Laravel\Nova\Fields\ID;
 use Laravel\Nova\Fields\Boolean;
 use Laravel\Nova\Http\Requests\NovaRequest;
@@ -45,31 +44,6 @@ class Role extends Resource
     public static $search = [
         'id,name',
     ];
-
-    public static function authorizedToViewAny(Request $request)
-    {
-        return $request->user()?->hasRole('admin') ?? false;
-    }
-
-    public function authorizedToView(Request $request)
-    {
-        return $request->user()?->hasRole('admin') ?? false;
-    }
-
-    public static function authorizedToCreate(Request $request)
-    {
-        return $request->user()?->hasRole('admin') ?? false;
-    }
-
-    public function authorizedToUpdate(Request $request)
-    {
-        return $request->user()?->hasRole('admin') ?? false;
-    }
-
-    public function authorizedToDelete(Request $request)
-    {
-        return $request->user()?->hasRole('admin') ?? false;
-    }
 
     /**
      * Get the fields displayed by the resource.

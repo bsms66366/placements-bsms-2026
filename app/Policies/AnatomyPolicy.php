@@ -2,10 +2,10 @@
 
 namespace App\Policies;
 
-class RolePolicy extends GroupPolicy
+class AnatomyPolicy extends GroupPolicy
 {
     protected function allowedRoles(): array
     {
-        return ['admin'];
+        return ['anatomy_editor'];
     }
 }
