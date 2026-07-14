@@ -72,7 +72,7 @@ class Notes extends Resource
             ID::make()->sortable(),
             Text::make('Name', 'name')->sortable(),
             
-            BelongsTo::make('User'),
+            BelongsTo::make('User', 'user', \App\Nova\Admin\User::class),
             Text::make('User Email', function () {
                 return $this->user->email ?? '-';
             }),

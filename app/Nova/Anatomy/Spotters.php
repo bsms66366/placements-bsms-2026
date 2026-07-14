@@ -71,7 +71,7 @@ class Spotters extends Resource
         return [
                 ID::make()->sortable(),
                 Text::make('Name', 'name'),
-                BelongsTo::make('User')->displayUsing(function ($user) {
+                BelongsTo::make('User', 'user', \App\Nova\Admin\User::class)->displayUsing(function ($user) {
                     return $user->email ?? '-';
                 })->sortable(),
                 URL::make('URL', 'link'),
