@@ -302,21 +302,23 @@ Route::middleware('api')->group(function () {
     Route::resource('dissections', VideoController::class);
 });
 
-Route::middleware('api')->group(function () {
-    Route::resource('users', UserController::class);
-});
+// Commented out - duplicate route defined in web.php
+// Route::middleware('api')->group(function () {
+//     Route::resource('users', UserController::class);
+// });
 
-Route::post('/forgot-password', function (Request $request) {
-    $request->validate(['email' => 'required|email']);
- 
-    $status = Password::sendResetLink(
-        $request->only('email')
-    );
- 
-    return $status === Password::RESET_LINK_SENT
-                ? back()->with(['status' => __($status)])
-                : back()->withErrors(['email' => __($status)]);
-})->middleware('guest')->name('password.email');
+// Commented out - duplicate route defined in auth.php
+// Route::post('/forgot-password', function (Request $request) {
+//     $request->validate(['email' => 'required|email']);
+//  
+//     $status = Password::sendResetLink(
+//         $request->only('email')
+//     );
+//  
+//     return $status === Password::RESET_LINK_SENT
+//                 ? back()->with(['status' => __($status)])
+//                 : back()->withErrors(['email' => __($status)]);
+// })->middleware('guest')->name('password.email');
 
 Route::get('/reset-password', [NovaResetPasswordController::class, 'showResetForm']);
 
@@ -389,8 +391,12 @@ Route::get('examinations', function() {
     return Examination::where('active', true)->orderBy('sort_order')->get();
 });
 
-Route::get('examination-results', function() {
-    return ExaminationResult::all();
+Route::get('examination-results', function(Request $request) {
+    $query = ExaminationResult::query();
+    if ($request->has('bsms_id')) {
+        $query->where('bsms_id', $request->query('bsms_id'));
+    }
+    return $query->get();
 });
 
 Route::middleware('auth:sanctum')->post('examination-results', function(Request $request) {
@@ -398,10 +404,16 @@ Route::middleware('auth:sanctum')->post('examination-results', function(Request 
         'examination_id' => 'required|exists:examinations,id',
         'bsms_id' => 'required|string|max:255',
         'is_competent' => 'required|boolean',
-        'assessed_at' => 'required|date',
     ]);
-    
-    return ExaminationResult::create($validated);
+
+    if ($validated['is_competent']) {
+        $validated['assessed_at'] = now();
+    }
+
+    return ExaminationResult::updateOrCreate(
+        ['examination_id' => $validated['examination_id'], 'bsms_id' => $validated['bsms_id']],
+        $validated
+    );
 });
 
 // Staff and Group Routes

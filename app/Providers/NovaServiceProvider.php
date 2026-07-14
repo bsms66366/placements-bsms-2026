@@ -5,10 +5,6 @@ namespace App\Providers;
 use Illuminate\Support\Facades\Gate;
 use Laravel\Nova\Nova;
 use Laravel\Nova\NovaApplicationServiceProvider;
-use SimonHamp\LaravelNovaCsvImport\LaravelNovaCsvImport;
-use Pktharindu\NovaPermissions\Traits\ValidatesPermissions;
-//use App\Nova\Anatomy;
-
 use App\Http\Controllers\Auth\NovaResetPasswordController;
 use Laravel\Nova\Http\Controllers\ResetPasswordController;
 
@@ -50,44 +46,8 @@ class NovaServiceProvider extends NovaApplicationServiceProvider
     {
         $allowedRoles = explode(',', env('NOVA_ACCESS_ROLES', 'admin,supervisor'));
         
-        Gate::define('viewNova', function ($user) use ($allowedRoles){
-                    return in_array(optional($user->role)->name, $allowedRoles);
-                     // Allow only users with specific roles
-                             //return in_array(optional($user->role)->name, ['admin', 'editor','user']);
-                     
-                    
-                     // Old email-based access list (kept for testing)
-                    /*  return in_array($user->email, [
-                         'cj.taylor@bsms.ac.uk',
-                         'bsms6636@brighton.ac.uk',
-                         'bsms6636@sussex.ac.uk',
-                         'cj@taylormadeproductions.co.uk',
-                         'cjtaylormade@gmail.com',
-                         't.r.vincent@bsms.ac.uk',
-                         'c.ingram@bsms.ac.uk',
-                         'C.Hennessy@bsms.ac.uk',
-                         'd.stone@bsms.ac.uk',
-                         'C.F.Smith@sussex.ac.uk',
-                         'c.smith@bsms.ac.uk',
-                         "D.O'Brien@bsms.ac.uk",
-                         'stephen.bowman1@nhs.net',
-                         's.bowman@bsms.ac.uk',
-                         'n.walters@bsms.ac.uk',
-                         'a.dilley@bsms.ac.uk',
-                         'TELHelp@bsms.ac.uk',
-                         'm.koenig@bsms.ac.uk',
-                         'a.ackling@bsms.ac.uk',
-                         'L.Reid2@bsms.ac.uk',
-                         'bsmsa2ym@bsms.ac.uk',
-                         'O.Steele@bsms.ac.uk',
-                         'W.Rivers@bsms.ac.uk',
-                         'M.Adrain@bsms.ac.uk',
-                         'E.Mclean-Inglis@bsms.ac.uk'
-                     ]);
-                    
- */
-              
-              
+        Gate::define('viewNova', function ($user) use ($allowedRoles) {
+            return $user->hasAnyRole($allowedRoles);
         });
     }
     
@@ -155,7 +115,6 @@ class NovaServiceProvider extends NovaApplicationServiceProvider
     {
         return [
             new \App\Nova\Dashboards\Main,
-            //new \App\Nova\Dashboards\AnatomyInterface,
         ];
     }
 
@@ -168,18 +127,6 @@ class NovaServiceProvider extends NovaApplicationServiceProvider
     {
         return [
             new \Bsms\AllStudentsAttendance\AllStudentsAttendance,
-        //new DicomViewer,
-                //new \Mastani\NovaPasswordReset\NovaPasswordReset,
-            //new \Pktharindu\NovaPermissions\NovaPermissions(),
-        //(new \Sereny\NovaPermissions\NovaPermissions())->canSee(function ($request) {
-                    //return $request->user()->isSuperAdmin();
-               // }),
-        
-            //new \Sereny\NovaPermissions\NovaPermissions(),
-            //new Category,
-            //new Notes,
-        //new LaravelNovaCsvImport,
-        //new Module102,
         ];
     }
 

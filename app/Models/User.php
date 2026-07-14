@@ -72,12 +72,12 @@ class User extends Authenticatable
 
     public function hasRole($roleName)
     {
-        return optional($this->role)->name === $roleName;
+        return $this->role()->value('name') === $roleName;
     }
 
     public function hasAnyRole(array $roles)
     {
-        return in_array(optional($this->role)->name, $roles);
+        return in_array($this->role()->value('name'), $roles);
     }
 
     //public static $snakeAttributes = true;

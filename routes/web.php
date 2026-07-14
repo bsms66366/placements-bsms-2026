@@ -124,11 +124,11 @@ Route::get('/token', function () {
 });
 
 //// Forgot and Reset Password Routes
-Route::post('password/email', [ForgotPasswordController::class, 'sendResetLinkEmail'])->name('password.email');
-
-Route::get('password/reset', [ForgotPasswordController::class, 'showLinkRequestForm'])->name('password.request');
-Route::get('password/reset/{token}', [ResetPasswordController::class, 'showResetForm'])->name('password.reset');
-Route::post('password/reset', [ResetPasswordController::class, 'reset'])->name('password.update');
+// Commented out - these routes are defined in auth.php
+// Route::post('password/email', [ForgotPasswordController::class, 'sendResetLinkEmail'])->name('password.email');
+// Route::get('password/reset', [ForgotPasswordController::class, 'showLinkRequestForm'])->name('password.request');
+// Route::get('password/reset/{token}', [ResetPasswordController::class, 'showResetForm'])->name('password.reset');
+// Route::post('password/reset', [ResetPasswordController::class, 'reset'])->name('password.update');
 Route::get('/reset-password', [NovaResetPasswordController::class, 'showResetForm']);
 
 
