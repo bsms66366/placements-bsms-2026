@@ -91,7 +91,7 @@ class Biomedeng extends Resource
             Text::make('name', 'name')
                         ->filterable(),
 //                        ->searchable(),
-            BelongsTo::make('User','user')
+            BelongsTo::make('User', 'user', \App\Nova\Admin\User::class)
                     ->filterable(),
             Text::make('User Email', function () {
                     return $this->user->email ?? '-';

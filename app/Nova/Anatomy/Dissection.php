@@ -93,7 +93,7 @@ class Dissection extends Resource
         
             //Text::make('administrator', 'administrator'),
             //Text::make('email', 'email'),
-        BelongsTo::make('User','user'),
+        BelongsTo::make('User', 'user', \App\Nova\Admin\User::class),
         Text::make('User Email', function () {
                 return $this->user->email ?? '-';
             }),
