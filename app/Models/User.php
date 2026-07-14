@@ -72,12 +72,22 @@ class User extends Authenticatable
 
     public function hasRole($roleName)
     {
-        return $this->role()->value('name') === $roleName;
+        if ($this->role === $roleName) {
+            return true;
+        }
+        
+        $relationRole = $this->role()->value('name');
+        return $relationRole && $relationRole === $roleName;
     }
 
     public function hasAnyRole(array $roles)
     {
-        return in_array($this->role()->value('name'), $roles);
+        if (in_array($this->role, $roles)) {
+            return true;
+        }
+        
+        $relationRole = $this->role()->value('name');
+        return $relationRole && in_array($relationRole, $roles);
     }
 
     //public static $snakeAttributes = true;

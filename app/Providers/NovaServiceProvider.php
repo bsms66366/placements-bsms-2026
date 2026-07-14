@@ -19,7 +19,9 @@ class NovaServiceProvider extends NovaApplicationServiceProvider
     {
         parent::boot();
         $this->loadViewsFrom(resource_path('views/vendor/nova'), 'nova');
-       
+        
+        // Explicitly call resources() to ensure they're registered
+        $this->resources();
     }
 
     /**
